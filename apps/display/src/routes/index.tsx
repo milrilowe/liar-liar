@@ -42,15 +42,15 @@ function DisplayApp() {
     )
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 to-blue-900 text-white">
-      {gameState.mode === 'intro' && <IntroDisplay gameState={gameState} />}
-      {gameState.mode === 'game' && <GameDisplay gameState={gameState} />}
-      {gameState.mode === 'intermission' && <div className="flex items-center justify-center min-h-screen text-6xl">Intermission</div>}
-      {gameState.mode === 'leaderboard' && <div className="flex items-center justify-center min-h-screen text-6xl">Leaderboard</div>}
-      {gameState.mode === 'outro' && <div className="flex items-center justify-center min-h-screen text-6xl">Thanks for playing!</div>}
-    </div>
-  )
+return (
+  <div className="min-h-screen bg-gradient-to-br from-purple-900 to-blue-900 text-white">
+    {gameState.mode === 'welcome' && <IntroDisplay gameState={gameState} />}
+    {gameState.mode === 'game' && <GameDisplay gameState={gameState} />}
+    {gameState.mode === 'intermission' && <div className="flex items-center justify-center min-h-screen text-6xl">Intermission</div>}
+    {gameState.mode === 'scoring' && <div className="flex items-center justify-center min-h-screen text-6xl">Leaderboard</div>}
+    {gameState.mode === 'end' && <div className="flex items-center justify-center min-h-screen text-6xl">Thanks for playing!</div>}
+  </div>
+)
 }
 
 function IntroDisplay({ gameState }: { gameState: GameState }) {

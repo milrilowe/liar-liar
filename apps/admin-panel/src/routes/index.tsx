@@ -118,7 +118,7 @@ function AdminPanel() {
         </CardHeader>
         <CardContent>
           <div className="flex gap-2 flex-wrap">
-            {(['intro', 'game', 'intermission', 'leaderboard', 'outro'] as const).map(mode => (
+            {(["welcome", "game", "intermission", "scoring", "end"] as const).map(mode => (
               <Button
                 key={mode}
                 onClick={() => changeMode(mode)}
