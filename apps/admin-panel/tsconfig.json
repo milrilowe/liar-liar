@@ -19,7 +19,8 @@
       "@/*": ["./src/*"],
       "@liar-liar/server": ["../server/src/index.ts"],
       "@liar-liar/server/*": ["../server/src/*"]
-    }
+    },
+    "types": ["vite/client"]
   },
   "include": ["src"],
 }

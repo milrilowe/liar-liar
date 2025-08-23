@@ -1,13 +1,20 @@
-import { Link } from '@tanstack/react-router'
+import { Badge } from '@/components/ui/badge'
+import { useSocket } from '@/routes/-context/SocketProvider'
 
-export default function Header() {
+
+export function Header({ title, subtitle }: { title: string; subtitle?: string }) {
+const { connected, status } = useSocket()
+
+
   return (
-    <header className="p-2 flex gap-2 bg-white text-black justify-between">
-      <nav className="flex flex-row">
-        <div className="px-2 font-bold">
-          <Link to="/">Home</Link>
-        </div>
-      </nav>
-    </header>
+    <div className="flex items-center justify-between">
+      <div>
+        <h1 className="text-4xl font-bold text-gray-900">{title}</h1>
+        {subtitle && <p className="text-gray-600 mt-2">{subtitle}</p>}
+      </div>
+      <Badge variant={connected ? 'default' : 'destructive'} className="px-4 py-2">
+        {connected ? '🟢 Connected' : status === 'connecting' ? '🟡 Connecting' : '🔴 Disconnected'}
+      </Badge>
+    </div>
   )
 }

@@ -5,7 +5,7 @@ export interface IPrompt {
   answer: 'truth' | 'lie'; // Changed from 'actualAnswer' to 'answer'
 }
 
-export interface IComedian extends Document {
+export interface IComedian extends Document<string> {
   name: string;
   instagram: string;
   password: string;
