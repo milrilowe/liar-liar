@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Edit, Save, Trash2, X } from 'lucide-react'
-import { useSocket } from '../-context/SocketProvider'
+import { useSocket } from '../../../../../-context/SocketProvider'
 
 export function PromptRow({ comedianId, index, text, answer }: { comedianId: string; index: number; text: string; answer: 'truth' | 'lie' }) {
   const { updatePrompt, removePrompt } = useSocket()

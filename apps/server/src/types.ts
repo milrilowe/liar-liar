@@ -1,4 +1,4 @@
-export type { IGameState as GameState } from './models/GameState';
+export type { IGameState } from './models/GameState';
 export type { IComedian } from './models/Comedian';
 export type { IVote } from './models/Vote';
 

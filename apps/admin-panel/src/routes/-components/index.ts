@@ -1,4 +1,3 @@
-export * from './AddComedianCard';
-export * from './ComedianCard';
-export * from './ComedianList';
-export * from './GameStateCard';
+export * from './Welcome';
+export * from './Game';
+export * from './GameState';
