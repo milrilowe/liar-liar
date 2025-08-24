@@ -6,8 +6,8 @@ import { IGameState } from '@liar-liar/server/types'
 import { ResetGameButton, SetModeButton } from './components'
 
 export function GameState({ viewedMode, setViewedMode }: {
-    viewedMode: IGameState['mode'] | null
-    setViewedMode: (mode: IGameState['mode'] | null) => void
+    viewedMode: IGameState['mode']
+    setViewedMode: (mode: IGameState['mode']) => void
 }) {
     const { gameState, setMode } = useSocket()
     const currentGameMode = gameState?.mode

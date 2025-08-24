@@ -11,7 +11,7 @@ export const Route = createFileRoute('/')({
 
 function AdminPanelWithSocketProvider() {
   const { gameState } = useSocket();
-  const [viewMode, setViewMode] = useState<IGameState['mode'] | null>(null);
+  const [viewMode, setViewMode] = useState<IGameState['mode']>('welcome');
 
   if (!gameState) return ('Loading...')
 
