@@ -82,7 +82,7 @@ export function useParticipateSocket(): ParticipateSocketContextValue {
     return ctx
 }
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL ?? 'http://localhost:3001'
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL ?? window.location.origin;
 
 export function ParticipateSocketProvider({ children }: { children: ReactNode }) {
     const socketRef = useRef<Socket | null>(null)
@@ -324,14 +324,11 @@ export function ParticipateSocketProvider({ children }: { children: ReactNode })
     }
 
     return (
-        <ParticipateSocketProvider.Provider value={value}>
+        <ParticipateSocketContext.Provider value={value}>
             {children}
-        </ParticipateSocketProvider.Provider>
+        </ParticipateSocketContext.Provider>
     )
 }
 
 // Export the context for direct access if needed
 export { ParticipateSocketContext }
-
-// Fix: Correct component name
-ParticipateSocketProvider.Provider = ParticipateSocketContext.Provider

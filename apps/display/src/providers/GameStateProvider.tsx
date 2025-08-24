@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useRef, useState } from 'r
 import { io, Socket } from 'socket.io-client'
 import type { IGameState as GameState, IComedian } from '@liar-liar/server/types'
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL ?? 'http://localhost:3001'
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL ?? window.location.origin;
 
 type GameStateContextValue = {
     connected: boolean
