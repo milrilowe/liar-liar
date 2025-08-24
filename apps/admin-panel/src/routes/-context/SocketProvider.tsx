@@ -54,6 +54,8 @@ export interface SocketContextValue {
     setCurrentPrompt: (promptId: string) => void
     submitGuess: (guess: 'truth' | 'lie') => void
     undoGuess: () => void
+
+    resetGame: () => void
 }
 
 const SocketCtx = createContext<SocketContextValue | null>(null)
@@ -228,6 +230,10 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         emit('undoGuess')
     }, [emit])
 
+    const resetGame = useCallback(() => {
+        emit('resetGame')
+    }, [emit])
+
     const reconnect = useCallback(() => {
         const s = socketRef.current
         if (!s) return
@@ -257,8 +263,9 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         setCurrentPrompt,
         submitGuess,
         undoGuess,
+        resetGame
 
-    }), [status, lastError, reconnect, gameState, comedians, updateGameState, setMode, setCustomText, incrementScore, addComedian, updateComedian, removeComedian, addPrompt, updatePrompt, removePrompt, setCurrentComedian, setCurrentPrompt, submitGuess, undoGuess])
+    }), [status, lastError, reconnect, gameState, comedians, updateGameState, setMode, setCustomText, incrementScore, addComedian, updateComedian, removeComedian, addPrompt, updatePrompt, removePrompt, setCurrentComedian, setCurrentPrompt, submitGuess, undoGuess, resetGame])
 
     return <SocketCtx.Provider value={value}>{children}</SocketCtx.Provider>
 }

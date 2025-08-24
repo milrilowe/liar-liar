@@ -1,5 +1,5 @@
 export type { IGameState } from './models/GameState';
-export type { IComedian } from './models/Comedian';
+export type { IComedian, IPrompt } from './models/Comedian';
 export type { IVote } from './models/Vote';
 
 // Input types for API

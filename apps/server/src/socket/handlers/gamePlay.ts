@@ -138,4 +138,49 @@ export const handleGameplay = (socket: Socket, io: any) => {
             socket.emit('error', (err as Error).message || 'Failed to undo guess')
         }
     })
+
+    socket.on('resetGame', async () => {
+        try {
+            // 1. Reset game state: clear current comedian/prompt, reset scores
+            await GameState.updateOne({}, {
+                currentComedianId: null,
+                currentPromptId: null,
+                'teams.teamA.score': 0,
+                'teams.teamB.score': 0,
+                // Optionally reset mode to welcome:
+                // mode: 'welcome'
+            })
+
+            // 2. Remove all guesses from all comedian prompts
+            const allComedians = await Comedian.find()
+
+            for (const comedian of allComedians) {
+                let hasChanges = false
+
+                // Remove guess property from all prompts
+                for (const prompt of comedian.prompts as any[]) {
+                    if (prompt.guess) {
+                        delete prompt.guess
+                        hasChanges = true
+                    }
+                }
+
+                // Only save if there were changes
+                if (hasChanges) {
+                    await comedian.save()
+                }
+            }
+
+            // 3. Send updated state to all clients
+            const updatedGS = await GameState.findOne()
+            const updatedComedians = await Comedian.find()
+
+            io.emit('gameState', updatedGS)
+            io.emit('comediansList', updatedComedians)
+
+        } catch (err) {
+            console.error('resetGame error', err)
+            socket.emit('error', (err as Error).message || 'Failed to reset game')
+        }
+    })
 }
