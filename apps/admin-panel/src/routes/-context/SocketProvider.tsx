@@ -57,6 +57,11 @@ export interface SocketContextValue {
     undoGuess: () => void
 
     resetGame: () => void
+
+    getChatMessages: (options?: { limit?: number; gameSessionId?: string }) => void
+    clearChatMessages: (options?: { gameSessionId?: string }) => void
+    getAudienceStats: () => void
+    cleanupInactiveUsers: (options?: { olderThanHours?: number }) => void
 }
 
 const SocketCtx = createContext<SocketContextValue | null>(null)
@@ -241,6 +246,22 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         emit('resetGame')
     }, [emit])
 
+    const getChatMessages = useCallback((options?: { limit?: number; gameSessionId?: string }) => {
+        emit('getChatMessages', options || {})
+    }, [emit])
+
+    const clearChatMessages = useCallback((options?: { gameSessionId?: string }) => {
+        emit('clearChatMessages', options || {})
+    }, [emit])
+
+    const getAudienceStats = useCallback(() => {
+        emit('getAudienceStats')
+    }, [emit])
+
+    const cleanupInactiveUsers = useCallback((options?: { olderThanHours?: number }) => {
+        emit('cleanupInactiveUsers', options || {})
+    }, [emit])
+
     const reconnect = useCallback(() => {
         const s = socketRef.current
         if (!s) return
@@ -270,9 +291,13 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         setCurrentPrompt,
         submitGuess,
         undoGuess,
-        resetGame
+        resetGame,
+        getChatMessages,
+        clearChatMessages,
+        getAudienceStats,
+        cleanupInactiveUsers,
 
-    }), [status, lastError, reconnect, gameState, comedians, updateGameState, setMode, setCustomText, incrementScore, addComedian, updateComedian, removeComedian, addPrompt, updatePrompt, removePrompt, setCurrentComedian, setCurrentPrompt, submitGuess, undoGuess, resetGame])
+    }), [status, lastError, reconnect, gameState, comedians, updateGameState, setMode, setCustomText, incrementScore, addComedian, updateComedian, removeComedian, addPrompt, updatePrompt, removePrompt, setCurrentComedian, setCurrentPrompt, submitGuess, undoGuess, resetGame, getChatMessages, clearChatMessages, getAudienceStats, cleanupInactiveUsers, getAudienceStats, cleanupInactiveUsers])
 
     return <SocketCtx.Provider value={value}>{children}</SocketCtx.Provider>
 }
