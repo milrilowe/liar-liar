@@ -82,7 +82,8 @@ export function useParticipateSocket(): ParticipateSocketContextValue {
     return ctx
 }
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL ?? window.location.origin;
+const SOCKET_URL = import.meta.env.VITE_WS_URL ||
+    import.meta.env.VITE_SOCKET_URL || window.location.origin;
 
 export function ParticipateSocketProvider({ children }: { children: ReactNode }) {
     const socketRef = useRef<Socket | null>(null)

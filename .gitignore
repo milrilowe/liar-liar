@@ -1,2 +1,5 @@
 node_modules
 .env.*
+# Vite local-only envs
+*.env.local
+.env.local
