@@ -4,14 +4,13 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState, useEffect, useMemo } from 'react'
 import { ParticipateSocketProvider, useParticipateSocket } from '../providers'
-import { Users, MessageCircle, Send, LogOut, Crown, Vote, Eye } from 'lucide-react'
+import { Users, MessageCircle, Send, Crown, Vote } from 'lucide-react'
 
 // shadcn/ui
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 export const Route = createFileRoute('/')({
@@ -94,7 +93,7 @@ function AppWithProviders() {
 
   const [messageInput, setMessageInput] = useState('')
   const [hasVoted, setHasVoted] = useState(false)
-  const [vote, setVote] = useState<'truth' | 'lie' | null>(null)
+  const [, setVote] = useState<'truth' | 'lie' | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
@@ -165,20 +164,6 @@ function AppWithProviders() {
     } finally {
       setIsSubmitting(false)
     }
-  }
-
-  const handleLogout = () => {
-    localStorage.removeItem('auth')
-    localStorage.removeItem('userType')
-    localStorage.removeItem('userHandle')
-    localStorage.removeItem('username')
-    localStorage.removeItem('deviceId')
-    localStorage.removeItem('comedianId')
-    setIsAuthenticated(false)
-    setUserType(null)
-    setUsername('')
-    setHasVoted(false)
-    setVote(null)
   }
 
   // ---------------- SCREENS (shadcn + your theme) ----------------
