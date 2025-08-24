@@ -1,8 +1,11 @@
 "use client"
 
+import type React from "react"
+
 import { createContext, useContext, useMemo, useState } from "react"
-import { useSocket } from "@/routes/-context" // adjust path
+import { useSocket } from "@/routes/-context"
 import type { IComedian, IPrompt } from "@liar-liar/server/types"
+import type { Types as MTypes } from "mongoose"
 
 type Guess = "truth" | "lie" | null
 
@@ -39,14 +42,7 @@ type ViewerContextValue = {
 const ViewerContext = createContext<ViewerContextValue | null>(null)
 
 export function ViewerProvider({ children }: { children: React.ReactNode }) {
-    const {
-        comedians,
-        gameState,
-        setCurrentComedian,
-        setCurrentPrompt,
-        submitGuess,
-        undoGuess,
-    } = useSocket()
+    const { comedians, gameState, setCurrentComedian, setCurrentPrompt, submitGuess, undoGuess } = useSocket()
 
     const [viewComedianId, setViewComedianId] = useState<string | null>(null)
     const [viewPromptId, setViewPromptId] = useState<string | null>(null)
@@ -60,30 +56,22 @@ export function ViewerProvider({ children }: { children: React.ReactNode }) {
         return comedians.find((c) => String(c._id) === String(id)) || null
     }, [viewComedianId, currentComedianId, comedians])
 
-    const viewedPrompts = viewedComedian?.prompts ?? []
+    const viewedPrompts = (viewedComedian?.prompts ?? []) as (IPrompt & { _id: MTypes.ObjectId })[]
 
     const viewedPrompt = useMemo(() => {
         const id = viewPromptId || currentPromptId || null
-        return viewedPrompts.find((p) => String((p as any)._id) === String(id)) || null
+        return viewedPrompts.find((p) => String(p._id) === String(id)) || null
     }, [viewPromptId, currentPromptId, viewedPrompts])
 
-    const isViewedComedianCurrent =
-        !!viewedComedian && String(currentComedianId) === String(viewedComedian._id)
+    const isViewedComedianCurrent = !!viewedComedian && String(currentComedianId) === String(viewedComedian._id)
 
-    const isViewedPromptCurrent =
-        !!viewedPrompt && String(currentPromptId) === String((viewedPrompt as any)._id)
+    const isViewedPromptCurrent = !!viewedPrompt && String(currentPromptId) === String((viewedPrompt as any)._id)
 
-    const canSetCurrentPrompt =
-        isViewedComedianCurrent && !!viewedPrompt && !isViewedPromptCurrent
+    const canSetCurrentPrompt = isViewedComedianCurrent && !!viewedPrompt && !isViewedPromptCurrent
 
-    const canSubmit =
-        isViewedComedianCurrent &&
-        isViewedPromptCurrent &&
-        !(viewedPrompt as any)?.guess &&
-        !!pendingGuess
+    const canSubmit = isViewedComedianCurrent && isViewedPromptCurrent && !(viewedPrompt as any)?.guess && !!pendingGuess
 
-    const canUndo =
-        isViewedComedianCurrent && isViewedPromptCurrent && !!(viewedPrompt as any)?.guess
+    const canUndo = isViewedComedianCurrent && isViewedPromptCurrent && !!(viewedPrompt as any)?.guess
 
     const value: ViewerContextValue = {
         comedians,

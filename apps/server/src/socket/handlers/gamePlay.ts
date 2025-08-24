@@ -34,10 +34,13 @@ function getPromptByIdOrThrow<T extends { _id: any }>(
 
 export const handleGameplay = (socket: Socket, io: any) => {
     // ---------- Set current comedian ----------
-    socket.on('setCurrentComedian', async (comedianId: string) => {
+    socket.on('setCurrentComedian', async (comedianId: string | null) => {
         try {
             await getOrCreateGameState()
-            await GameState.updateOne({}, { currentComedianId: comedianId, currentPromptId: null })
+            await GameState.updateOne({}, {
+                currentComedianId: comedianId,
+                currentPromptId: null  // Clear prompt when comedian changes
+            })
             const updated = await GameState.findOne()
             io.emit('gameState', updated)
         } catch (err) {
@@ -47,8 +50,16 @@ export const handleGameplay = (socket: Socket, io: any) => {
     })
 
     // ---------- Set current prompt (must belong to current comedian) ----------
-    socket.on('setCurrentPrompt', async (promptId: string) => {
+    socket.on('setCurrentPrompt', async (promptId: string | null) => {
         try {
+            if (promptId === null) {
+                // Clear current prompt
+                await GameState.updateOne({}, { currentPromptId: null })
+                const updated = await GameState.findOne()
+                io.emit('gameState', updated)
+                return
+            }
+
             const { gs, comedian } = await getCurrentComedianOrThrow()
             // Ensure the prompt belongs to this comedian
             const prompt = getPromptByIdOrThrow(comedian.prompts as any, promptId)

@@ -50,8 +50,9 @@ export interface SocketContextValue {
     updatePrompt: (args: { comedianId: string; index: number; prompt: PromptPayload }) => void
     removePrompt: (args: { comedianId: string; index: number }) => void
 
-    setCurrentComedian: (comedianId: string) => void
-    setCurrentPrompt: (promptId: string) => void
+    // Update these to accept null values
+    setCurrentComedian: (comedianId: string | null) => void
+    setCurrentPrompt: (promptId: string | null) => void
     submitGuess: (guess: 'truth' | 'lie') => void
     undoGuess: () => void
 
@@ -211,15 +212,21 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         emit('removePrompt', args)
     }, [emit])
 
-    const setCurrentComedian = useCallback((comedianId: string) => {
-        emit('setCurrentComedian', comedianId)
+    const setCurrentComedian = useCallback((comedianId: string | null) => {
+        if (comedianId === null) {
+            emit('setCurrentComedian', null)
+        } else {
+            emit('setCurrentComedian', comedianId)
+        }
     }, [emit])
 
-
-    const setCurrentPrompt = useCallback((promptId: string) => {
-        emit('setCurrentPrompt', promptId)
+    const setCurrentPrompt = useCallback((promptId: string | null) => {
+        if (promptId === null) {
+            emit('setCurrentPrompt', null)
+        } else {
+            emit('setCurrentPrompt', promptId)
+        }
     }, [emit])
-
 
     const submitGuess = useCallback((guess: 'truth' | 'lie') => {
         emit('submitGuess', { guess })
