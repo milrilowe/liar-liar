@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { FullscreenProvider, GameStateProvider, useGameState } from '@/providers'
-import { Game, Welcome } from './-components';
+import { Game, Welcome, Scoring } from './-components';
 
 export const Route = createFileRoute('/')({
   component: DisplayApp,
@@ -19,7 +19,7 @@ function DisplayAppWithProviders() {
         'welcome': <Welcome />,
         'game': <Game />,
         'intermission': <></>,
-        'scoring': <></>,
+        'scoring': <Scoring />,
         'end': <></>
       }[gameState.mode]}
     </div>

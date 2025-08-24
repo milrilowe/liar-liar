@@ -93,7 +93,7 @@ export function Game() {
             {currentComedian && (
                 <div className="absolute top-8 left-0 right-0 mx-auto w-full max-w-6xl px-6">
                     <div className="flex items-center justify-between bg-black/20 backdrop-blur-sm rounded-2xl p-6 border-4 border-yellow-400">
-                        <div className="text-left">
+                        <div className="text-left gap-3 flex flex-col cols-1">
                             <div className="text-3xl md:text-4xl font-black text-yellow-400 drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">
                                 {currentComedian.name}
                             </div>

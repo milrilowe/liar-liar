@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { SocketProvider, useSocket } from '../routes/-context/'
 
-import { GameState, Welcome, Game } from './-components'
+import { GameState, Welcome, Game, End, Scoring } from './-components'
 import { IGameState } from '@liar-liar/server/types'
 
 export const Route = createFileRoute('/')({
@@ -24,10 +24,10 @@ function AdminPanelWithSocketProvider() {
 
       {{
         'welcome': <Welcome />,
-        'end': <></>,
+        'end': <End />,
         'game': <Game />,
         'intermission': <></>,
-        'scoring': <></>,
+        'scoring': <Scoring />,
       }[currentMode]}
     </div>
   )
