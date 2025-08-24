@@ -13,7 +13,7 @@ function DisplayAppWithProviders() {
 
   return (
     <div
-      className="min-h-screen flex flex-col bg-gradient-to-br from-purple-900 to-blue-900 text-white"
+      className="min-h-screen flex flex-col bg-gradient-to-br from-purple-900 to-blue-900 text-white relative"
     >
       {{
         'welcome': <Welcome />,
@@ -22,13 +22,20 @@ function DisplayAppWithProviders() {
         'scoring': <Scoring />,
         'end': <></>
       }[gameState.mode]}
+
+      {/* QR Code in bottom right corner */}
+      <div className="fixed bottom-4 right-4 z-50">
+        <img
+          src="/qr-code.png"
+          alt="QR Code"
+          className="w-56 h-56 object-contain"
+        />
+      </div>
     </div>
   )
 }
 
-
 function DisplayApp() {
-
   return (
     <FullscreenProvider>
       <GameStateProvider>
@@ -36,5 +43,4 @@ function DisplayApp() {
       </GameStateProvider>
     </FullscreenProvider>
   )
-
 }

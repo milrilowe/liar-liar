@@ -1,3 +1,4 @@
+// apps/participate/src/providers/SocketProvider.tsx
 import { createContext, useCallback, useContext, useEffect, useRef, useState, ReactNode } from 'react'
 import { io, Socket } from 'socket.io-client'
 
@@ -44,6 +45,11 @@ interface IAudienceUser {
     joinedAt: string
     messageCount: number
     voteCount: number
+    // New leaderboard fields
+    correctVotes?: number
+    totalVotes?: number
+    currentStreak?: number
+    longestStreak?: number
 }
 
 type SocketStatus = 'idle' | 'connecting' | 'connected' | 'error'
@@ -256,9 +262,10 @@ export function ParticipateSocketProvider({ children }: { children: ReactNode })
             throw new Error('Cannot vote right now')
         }
 
+        // Updated to use username instead of deviceId
         socket.emit('submitVote', {
             promptId: gameState.currentPromptId,
-            deviceId: currentUser.deviceId, // Using deviceId for vote tracking
+            username: currentUser.username, // Changed from deviceId to username
             vote
         })
     }, [currentUser, gameState])
