@@ -29,8 +29,8 @@ export function GameStateProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         const socket = io(SOCKET_URL, {
-            path: '/socket.io',
             autoConnect: true,
+            transports: ['websocket']
         })
         sockRef.current = socket
 

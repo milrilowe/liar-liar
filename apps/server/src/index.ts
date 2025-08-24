@@ -30,13 +30,8 @@ mongoose.connect(process.env.MONGODB_URI!)
 const server = http.createServer(app);
 
 const io = new Server(server, {
-  path: '/socket.io',                      // <— be explicit
-  cors: {
-    origin: allowAll ? true : corsOrigins, // <— '*' -> true
-    credentials: true,
-    methods: ['GET', 'POST']
-  }
-});
+  path: '/socket.io',
+})
 
 setupSocket(io);
 
