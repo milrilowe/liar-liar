@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useRef, useState } from 'r
 import { io, Socket } from 'socket.io-client'
 import type { IGameState as GameState, IComedian } from '@liar-liar/server/types'
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL ?? window.location.origin;
+const BASE = import.meta.env.VITE_WS_URL || window.location.origin
 
 type GameStateContextValue = {
     connected: boolean
@@ -27,7 +27,10 @@ export function GameStateProvider({ children }: { children: React.ReactNode }) {
     const sockRef = useRef<Socket | null>(null)
 
     useEffect(() => {
-        const socket = io(SOCKET_URL, { transports: ['websocket'], autoConnect: true })
+        const socket = io(BASE, {
+            path: '/socket.io',
+            autoConnect: true,
+        })
         sockRef.current = socket
 
         socket.on('connect', () => {

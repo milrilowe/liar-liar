@@ -73,7 +73,7 @@ export function useSocket(): SocketContextValue {
 }
 
 // Prefer env var; fallback for local dev
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL ?? window.location.origin;
+const BASE = import.meta.env.VITE_WS_URL || window.location.origin
 
 export function SocketProvider({ children }: { children: ReactNode }) {
     const socketRef = useRef<Socket | null>(null)
@@ -89,9 +89,9 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     // Init socket once
     useEffect(() => {
         setStatus('connecting')
-        const s = io(SOCKET_URL, {
+        const s = io(BASE, {
+            path: '/socket.io',
             autoConnect: true,
-            transports: ['websocket'], // lower latency for live control
         })
         socketRef.current = s
 
