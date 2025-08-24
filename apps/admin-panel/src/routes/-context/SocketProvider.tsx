@@ -49,6 +49,11 @@ export interface SocketContextValue {
     addPrompt: (args: { comedianId: string; prompt: PromptPayload }) => void
     updatePrompt: (args: { comedianId: string; index: number; prompt: PromptPayload }) => void
     removePrompt: (args: { comedianId: string; index: number }) => void
+
+    setCurrentComedian: (comedianId: string) => void
+    setCurrentPrompt: (promptId: string) => void
+    submitGuess: (guess: 'truth' | 'lie') => void
+    undoGuess: () => void
 }
 
 const SocketCtx = createContext<SocketContextValue | null>(null)
@@ -204,6 +209,25 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         emit('removePrompt', args)
     }, [emit])
 
+    const setCurrentComedian = useCallback((comedianId: string) => {
+        emit('setCurrentComedian', comedianId)
+    }, [emit])
+
+
+    const setCurrentPrompt = useCallback((promptId: string) => {
+        emit('setCurrentPrompt', promptId)
+    }, [emit])
+
+
+    const submitGuess = useCallback((guess: 'truth' | 'lie') => {
+        emit('submitGuess', { guess })
+    }, [emit])
+
+
+    const undoGuess = useCallback(() => {
+        emit('undoGuess')
+    }, [emit])
+
     const reconnect = useCallback(() => {
         const s = socketRef.current
         if (!s) return
@@ -229,7 +253,12 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         addPrompt,
         updatePrompt,
         removePrompt,
-    }), [status, lastError, reconnect, gameState, comedians, updateGameState, setMode, setCustomText, incrementScore, addComedian, updateComedian, removeComedian, addPrompt, updatePrompt, removePrompt])
+        setCurrentComedian,
+        setCurrentPrompt,
+        submitGuess,
+        undoGuess,
+
+    }), [status, lastError, reconnect, gameState, comedians, updateGameState, setMode, setCustomText, incrementScore, addComedian, updateComedian, removeComedian, addPrompt, updatePrompt, removePrompt, setCurrentComedian, setCurrentPrompt, submitGuess, undoGuess])
 
     return <SocketCtx.Provider value={value}>{children}</SocketCtx.Provider>
 }
