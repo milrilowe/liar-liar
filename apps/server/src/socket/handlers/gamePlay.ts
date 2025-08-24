@@ -158,29 +158,13 @@ export const handleGameplay = (socket: Socket, io: any) => {
                 currentPromptId: null,
                 'teams.teamA.score': 0,
                 'teams.teamB.score': 0,
-                // Optionally reset mode to welcome:
-                // mode: 'welcome'
             })
 
-            // 2. Remove all guesses from all comedian prompts
-            const allComedians = await Comedian.find()
-
-            for (const comedian of allComedians) {
-                let hasChanges = false
-
-                // Remove guess property from all prompts
-                for (const prompt of comedian.prompts as any[]) {
-                    if (prompt.guess) {
-                        delete prompt.guess
-                        hasChanges = true
-                    }
-                }
-
-                // Only save if there were changes
-                if (hasChanges) {
-                    await comedian.save()
-                }
-            }
+            // 2. Remove ALL guess fields from ALL prompts in ALL comedians with a single query
+            await Comedian.updateMany(
+                {}, // Match all comedians
+                { $unset: { "prompts.$[].guess": 1 } } // Remove guess from all prompts
+            )
 
             // 3. Send updated state to all clients
             const updatedGS = await GameState.findOne()
@@ -188,6 +172,8 @@ export const handleGameplay = (socket: Socket, io: any) => {
 
             io.emit('gameState', updatedGS)
             io.emit('comediansList', updatedComedians)
+
+            console.log('Game reset successfully')
 
         } catch (err) {
             console.error('resetGame error', err)

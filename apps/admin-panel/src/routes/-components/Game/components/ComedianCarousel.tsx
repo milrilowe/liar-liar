@@ -2,7 +2,6 @@
 
 import type { IComedian } from "@liar-liar/server/types"
 import { Card } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface ComedianCarouselProps {
     comedians: IComedian[]
@@ -23,8 +22,8 @@ export function ComedianCarousel({
                 <h3 className="text-sm font-medium text-muted-foreground">Select Comedian</h3>
             </div>
 
-            <ScrollArea className="w-full">
-                <div className="flex gap-3 pb-2">
+            <div className="w-full overflow-x-auto overflow-y-hidden scrollbar-hide">
+                <div className="flex gap-3 pb-2" style={{ width: "max-content" }}>
                     {comedians.map((comedian) => {
                         const isSelected = selectedComedianId === comedian._id
                         const isCurrent = currentComedianId === comedian._id
@@ -57,7 +56,7 @@ export function ComedianCarousel({
                         )
                     })}
                 </div>
-            </ScrollArea>
+            </div>
         </div>
     )
 }
